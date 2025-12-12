@@ -2,15 +2,15 @@
 
 .container {
     min-height: 100vh;
-    max-height: 100vh;
+    /* ELIMINAR O COMENTAR: max-height: 100vh; */
     background: linear-gradient(135deg, #111827 0%, #581c87 50%, #111827 100%);
     position: relative;
-    overflow: hidden;
+    /* ELIMINAR O COMENTAR: overflow: hidden; (Permitirá el scroll global) */
+    overflow-x: hidden; /* Mantenemos el hidden horizontal */
     width: 100vw;
     margin: 0;
     padding: 0;
 }
-
 /* Efectos de fondo */
 .background {
     position: absolute;
@@ -91,7 +91,8 @@
 .content {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh; /* Cambiamos a min-height */
+    height: auto; /* Permite que crezca */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,7 +151,8 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    max-height: 90vh;
+    /* ELIMINAR O COMENTAR LA SIGUIENTE LÍNEA: */
+    /* max-height: 90vh; */ 
     overflow: hidden;
 }
 
@@ -158,7 +160,8 @@
     .columns {
         flex-direction: row;
         gap: 2rem;
-        max-height: 85vh;
+        /* ELIMINAR O COMENTAR LA SIGUIENTE LÍNEA: */
+        /* max-height: 85vh; */
     }
 }
 
@@ -898,15 +901,20 @@
 }
 
 /* Responsive adicional */
+/* Responsive adicional */
 @media (max-width: 1023px) {
     .container {
-        overflow-y: auto;
+        /* ESTO YA NO ES NECESARIO SI HACEMOS EL SCROLL GLOBAL */
+        /* overflow-y: auto; */
     }
     
     .columns {
         max-width: 600px;
         margin: 0 auto;
-        max-height: none;
+        /* ELIMINAR O COMENTAR LA SIGUIENTE LÍNEA: */
+        /* max-height: none; */ 
+        height: auto; /* Asegurar que no restrinja la altura */
+        padding: 2rem 0; /* Añadir padding vertical para respirar */
     }
     
     .infoColumn {
