@@ -68,3 +68,27 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.mediaverseToast {
+    /* Fondo que se integra con tu diseño oscuro */
+    background: #111827 !important; /* Tailwind Gray-900 oscuro */
+    color: #f3f4f6 !important; /* Color de texto claro */
+    border-radius: 0.75rem !important; /* Bordes redondeados */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Color de la barra de progreso para las notificaciones de Éxito */
+.Toastify__progress-bar--success {
+    background: #10b981 !important; /* Tailwind Emerald-500 */
+}
+
+/* Color de la barra de progreso para las notificaciones de Error */
+.Toastify__progress-bar--error {
+    background: #ef4444 !important; /* Tailwind Red-500 */
+}
+
+/* Color de la barra de progreso para las notificaciones de Información (Eliminar) */
+.Toastify__progress-bar--info {
+    background: #6366f1 !important; /* Tailwind Indigo-500 */
+}

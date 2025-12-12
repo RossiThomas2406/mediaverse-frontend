@@ -8,6 +8,7 @@ function DashboardPage() {
     const [listItems, setListItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [statusFilter, setStatusFilter] = useState('all');
+    const [itemToDelete, setItemToDelete] = useState(null);
     const navigate = useNavigate();
 
     // Función para obtener los datos
@@ -27,20 +28,35 @@ function DashboardPage() {
         }
     };
     
-    // Función para eliminar un ítem
-    const handleDelete = async (id, title) => {
-        if (!window.confirm(`¿Estás seguro de eliminar "${title}" de tu lista?`)) {
-            return;
-        }
+    const openDeleteModal = (item) => {
+        setItemToDelete(item); // Guarda el ítem completo (ID y título)
+    };
+
+    // Función de eliminación real
+    const handleDeleteConfirm = async () => {
+        if (!itemToDelete) return; // Si no hay ítem, salir
+
+        const { _id, title } = itemToDelete;
+        
         try {
-            await apiService.delete(`/api/list/${id}`);
-            // Actualizar la lista después de eliminar
-            setListItems(listItems.filter(item => item._id !== id));
+            await apiService.delete(`/api/list/${_id}`);
+            setListItems(listItems.filter(item => item._id !== _id));
+            
             toast.info(`"${title}" eliminado de tu lista.`);
+            
+            // Cerrar el modal al terminar
+            setItemToDelete(null); 
+
         } catch (error) {
-            console.log("Error al eliminar el item:", error);
+            console.error("Error al eliminar:", error);
             toast.error("Error al eliminar el ítem.");
+            setItemToDelete(null); // Cerrar el modal incluso si hay error
         }
+    };
+
+    // Función para cerrar el modal
+    const closeDeleteModal = () => {
+        setItemToDelete(null);
     };
 
     const handleUpdateStatus = async (id, currentStatus) => {
@@ -101,6 +117,32 @@ function DashboardPage() {
         return item.status === statusFilter;
     });
  
+
+    {itemToDelete && (
+        <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+                <h3 className={styles.modalTitle}>⚠️ Confirmar Eliminación</h3>
+                <p className={styles.modalMessage}>
+                    ¿Estás seguro de que deseas eliminar **"{itemToDelete.title}"** de tu lista? Esta acción es permanente.
+                </p>
+                <div className={styles.modalActions}>
+                    <button 
+                        onClick={closeDeleteModal} 
+                        className={styles.cancelButton}
+                    >
+                        Cancelar
+                    </button>
+                    <button 
+                        onClick={handleDeleteConfirm} 
+                        className={styles.confirmButton}
+                    >
+                        Sí, Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    )}
+
     return (
         <div className={styles.container}> {/* Usamos .container para el fondo */}
             <div className={styles.background}>
@@ -190,7 +232,7 @@ function DashboardPage() {
 
                                     {/* Botón para Eliminar */}
                                     <button 
-                                        onClick={() => handleDelete(item._id, item.title)}
+                                        onClick={() => openDeleteModal(item)} // <-- LLAMA A ABRIR MODAL
                                         className={styles.deleteButton}
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -207,6 +249,31 @@ function DashboardPage() {
                         MediaVerse © {new Date().getFullYear()} - Tu tracker personal de medios
                     </p>
                 </div>
+
+                {itemToDelete && (
+                    <div className={styles.modalOverlay}>
+                        <div className={styles.modalContent}>
+                            <h3 className={styles.modalTitle}>⚠️ Confirmar Eliminación</h3>
+                            <p className={styles.modalMessage}>
+                                ¿Estás seguro de que deseas eliminar **"{itemToDelete.title}"** de tu lista? Esta acción es permanente.
+                            </p>
+                            <div className={styles.modalActions}>
+                                <button 
+                                    onClick={closeDeleteModal} 
+                                    className={styles.cancelButton}
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    onClick={handleDeleteConfirm} 
+                                    className={styles.confirmButton}
+                                >
+                                    Sí, Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

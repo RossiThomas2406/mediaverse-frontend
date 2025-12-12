@@ -589,3 +589,82 @@ html, body {
 .container::-webkit-scrollbar-thumb:hover {
     background: rgba(168, 85, 247, 0.5);
 }
+
+/* DashboardPage.module.css (ESTILOS PARA EL MODAL DE CONFIRMACIÓN) */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Asegurar que esté encima de todo */
+}
+
+.modalContent {
+    background: #1f2937; /* Gray-800 o tu color de fondo de tarjeta */
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modalTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fca5a5; /* Red-300 para advertencia */
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.modalMessage {
+    font-size: 1rem;
+    color: #e5e7eb; /* Gray-200 */
+    margin-bottom: 1.5rem;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.cancelButton {
+    /* Estilos para el botón de cancelar */
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    background: #4b5563; /* Gray-600 */
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+}
+
+.cancelButton:hover {
+    background: #6b7280; /* Gray-500 */
+}
+
+.confirmButton {
+    /* Estilos para el botón de confirmación (eliminar) */
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    background: #ef4444; /* Red-500 */
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+}
+
+.confirmButton:hover {
+    background: #dc2626; /* Red-600 */
+}
+

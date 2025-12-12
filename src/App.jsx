@@ -39,7 +39,21 @@ function App() {
           
         </Routes>
       </div>
-      <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+      <ToastContainer 
+        position="bottom-right" 
+        autoClose={3000} 
+        theme="dark" 
+        // PROPIEDAD CRÍTICA: Usa la clase global que definiste en index.css
+        toastClassName="mediaverseToast" 
+        
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+      />
     </Router>
   );
 }
