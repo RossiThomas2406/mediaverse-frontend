@@ -902,12 +902,7 @@
 
 /* Responsive adicional */
 /* Responsive adicional */
-@media (max-width: 1023px) {
-    .container {
-        /* ESTO YA NO ES NECESARIO SI HACEMOS EL SCROLL GLOBAL */
-        /* overflow-y: auto; */
-    }
-    
+@media (max-width: 1023px) {    
     .columns {
         max-width: 600px;
         margin: 0 auto;
