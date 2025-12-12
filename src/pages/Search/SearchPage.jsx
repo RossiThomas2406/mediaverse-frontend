@@ -3,6 +3,7 @@ import apiService from '../../api/apiService';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { toast } from 'react-toastify';
 import styles from './SearchPage.module.css';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -12,14 +13,32 @@ function SearchPage() {
     const [results, setResults] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [imageLoading, setImageLoading] = useState({});
     const { logout } = useAuth();
-    const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w200';
-    
+
+    // Función inteligente para obtener la mejor imagen
+    const getImageUrl = (posterPath, quality = 'w500') => {
+        if (!posterPath) {
+            return 'https://via.placeholder.com/500x750/1e293b/94a3b8?text=No+Image';
+        }
+        return `https://image.tmdb.org/t/p/${quality}${posterPath}`;
+    };
+
+    // Manejar carga de imágenes
+    const handleImageLoad = (id) => {
+        setImageLoading(prev => ({ ...prev, [id]: false }));
+    };
+
+    const handleImageError = (id) => {
+        setImageLoading(prev => ({ ...prev, [id]: false }));
+    };
+
     const handleSearch = async (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
         setResults([]);
+        setImageLoading({});
 
         if (!searchTerm.trim()) {
             setError('Por favor, ingresa un término de búsqueda');
@@ -29,12 +48,18 @@ function SearchPage() {
 
         try {
             const url = `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${searchTerm}&language=es-ES`;
-            
             const response = await axios.get(url);
 
             const filteredResults = response.data.results.filter(
                 item => item.media_type === 'movie' || item.media_type === 'tv'
             );
+            
+            // Inicializar estado de carga para cada imagen
+            const initialImageLoading = {};
+            filteredResults.forEach(item => {
+                initialImageLoading[item.id] = true;
+            });
+            setImageLoading(initialImageLoading);
             
             setResults(filteredResults);
 
@@ -58,12 +83,35 @@ function SearchPage() {
 
             await apiService.post('/api/list', dataToSave);
             
-            alert(`"${dataToSave.title}" agregado a tu lista con éxito.`);
+            // Notificación más sutil
+            toast.success(`"${dataToSave.title}" agregado a tu lista.`);
 
         } catch (err) {
             const msg = err.response?.data?.msg || 'Error al guardar. Verifica tu sesión.';
-            alert(`Fallo al guardar: ${msg}`);
+            toast.error(`Fallo al guardar: ${msg}`);
         }
+    };
+
+    // Formatear fecha
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Fecha no disponible';
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        } catch {
+            return dateString;
+        }
+    };
+
+    // Limitar sinopsis
+    const truncateOverview = (overview, maxLength = 150) => {
+        if (!overview) return 'Sinopsis no disponible.';
+        if (overview.length <= maxLength) return overview;
+        return overview.substring(0, maxLength) + '...';
     };
 
     return (
@@ -153,55 +201,62 @@ function SearchPage() {
                 <div className={styles.resultsContainer}>
                     {results.length > 0 && (
                         <h2 className={styles.resultsTitle}>
-                            Resultados para: <span className="text-blue-300">"{searchTerm}"</span>
+                            Resultados para: <span className={styles.searchTermHighlight}>"{searchTerm}"</span>
                         </h2>
                     )}
                     
                     {loading ? (
                         <div className={styles.loadingState}>
                             <div className={styles.loadingSpinner}></div>
-                            <p>Buscando en nuestra base de datos...</p>
+                            <p className={styles.loadingText}>Buscando en nuestra base de datos...</p>
                         </div>
                     ) : results.length > 0 ? (
                         <div className={styles.resultsGrid}>
                             {results.map(item => {
-                                // Lógica para el póster y la sinopsis
-                                const imageUrl = item.poster_path 
-                                    ? `${TMDB_IMAGE_BASE_URL}${item.poster_path}` 
-                                    : 'https://via.placeholder.com/150x225.png?text=Sin+Poster'; // Placeholder si no hay imagen
-
+                                const imageUrl = getImageUrl(item.poster_path, 'w500');
+                                const hasImage = !!item.poster_path;
                                 const title = item.title || item.name;
-                                const overview = item.overview || 'Sinopsis no disponible.';
+                                const formattedDate = formatDate(item.release_date || item.first_air_date);
+                                const truncatedOverview = truncateOverview(item.overview, 120);
+                                const isImageLoading = imageLoading[item.id];
 
                                 return (
                                     <div key={item.id} className={styles.resultCard}>
-                                        {/* 1. CONTENEDOR DE LA IMAGEN */}
-                                        <div className={styles.posterContainer}>
+                                        {/* Contenedor de imagen con loading state */}
+                                        <div className={`${styles.posterContainer} ${!hasImage ? styles.noImage : ''}`}>
                                             <img 
                                                 src={imageUrl} 
                                                 alt={`Póster de ${title}`} 
-                                                className={styles.posterImage}
+                                                className={`${styles.posterImage} ${isImageLoading ? styles.imageLoading : styles.imageLoaded}`}
+                                                loading="lazy"
+                                                onLoad={() => handleImageLoad(item.id)}
+                                                onError={() => handleImageError(item.id)}
                                             />
+                                            {isImageLoading && (
+                                                <div className={styles.imageLoader}>
+                                                    <div className={styles.loaderSpinner}></div>
+                                                </div>
+                                            )}
                                             <span className={`${styles.mediaType} ${item.media_type === 'movie' ? styles.movie : styles.tv}`}>
                                                 {item.media_type === 'movie' ? '🎬 Película' : '📺 Serie'}
                                             </span>
                                         </div>
 
-                                        {/* 2. CONTENIDO Y ACCIONES */}
+                                        {/* Contenido de la tarjeta */}
                                         <div className={styles.cardContent}>
                                             <h3 className={styles.resultTitle}>{title}</h3>
                                             <p className={styles.resultDate}>
-                                                {item.release_date || item.first_air_date ? `Estreno: ${item.release_date || item.first_air_date}` : 'Fecha no disponible'}
+                                                {formattedDate}
                                             </p>
 
-                                            {/* 3. SINOPSIS */}
                                             <p className={styles.overviewText}>
-                                                {overview}
+                                                {truncatedOverview}
                                             </p>
 
                                             <button 
                                                 onClick={() => handleAddToList(item)}
                                                 className={styles.addButton}
+                                                disabled={loading}
                                             >
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
@@ -233,6 +288,14 @@ function SearchPage() {
                             <p className={styles.emptyText}>
                                 Busca tus películas y series favoritas para añadirlas a tu lista personal.
                             </p>
+                            <div className={styles.searchTips}>
+                                <p className={styles.tipsTitle}>Sugerencias:</p>
+                                <ul className={styles.tipsList}>
+                                    <li>Usa títulos completos para mejores resultados</li>
+                                    <li>Prueba con nombres en inglés</li>
+                                    <li>También puedes buscar por actor o director</li>
+                                </ul>
+                            </div>
                         </div>
                     )}
                 </div>

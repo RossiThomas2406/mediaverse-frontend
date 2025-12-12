@@ -1,11 +1,15 @@
 // src/App.jsx (VERSIÓN FINAL Y MÁS ROBUSTA PARA HASHROUTER)
 
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify'; // <-- IMPORTAR COMPONENTE
+import 'react-toastify/dist/ReactToastify.css'; // <-- IMPORTAR ESTILOS CSS
+
 import LoginPage from './pages/Auth/LoginPage'; 
 import RegisterPage from './pages/Auth/RegisterPage'; 
 import SearchPage from './pages/Search/SearchPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
-import ProtectedRoutes from './components/ProtectedRoutes'; 
+import ProtectedRoutes from './components/ProtectedRoutes';
+
 
 function App() {
   return (
@@ -35,6 +39,7 @@ function App() {
           
         </Routes>
       </div>
+      <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </Router>
   );
 }

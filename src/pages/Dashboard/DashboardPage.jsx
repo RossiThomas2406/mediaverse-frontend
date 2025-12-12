@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import apiService from '../../api/apiService';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './DashboardPage.module.css';
+import { toast } from 'react-toastify';
 
 function DashboardPage() {
     const [listItems, setListItems] = useState([]);
@@ -35,8 +36,10 @@ function DashboardPage() {
             await apiService.delete(`/api/list/${id}`);
             // Actualizar la lista después de eliminar
             setListItems(listItems.filter(item => item._id !== id));
+            toast.info(`"${title}" eliminado de tu lista.`);
         } catch (error) {
-            console.error("Error al eliminar:", error);
+            console.log("Error al eliminar el item:", error);
+            toast.error("Error al eliminar el ítem.");
         }
     };
 
@@ -55,11 +58,11 @@ function DashboardPage() {
                 item._id === id ? res.data : item // Reemplaza el ítem viejo con el ítem actualizado (que viene en res.data)
             ));
             
-            alert(`"${res.data.title}" marcado como Completado.`);
+            toast.success(`"${res.data.title}" marcado como Completado!`);
 
         } catch (error) {
             console.error("Error al actualizar el estado:", error);
-            alert("Fallo al actualizar el estado. Verifica tu sesión.");
+            toast.error("Fallo al actualizar el estado.");
         }
     };
 
