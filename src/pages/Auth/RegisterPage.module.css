@@ -192,8 +192,9 @@
     width: 100%;
     flex: 0 0 auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* CAMBIO: Alinear al inicio por defecto para evitar cortes */
+    align-items: flex-start; /* Cambio de center a flex-start */
+    justify-content: center; /* Centrado horizontal, si el contenido es más estrecho que la columna */
     padding: 1rem;
     height: 100%;
     overflow-y: auto;
@@ -207,6 +208,8 @@
         height: auto;
         max-height: 85vh;
         overflow-y: auto;
+        /* IMPORTANTE: Asegurar que NO haya centrado vertical aquí tampoco */
+        align-items: flex-start; /* Asegura que el contenido comience arriba */
     }
 }
 
