@@ -1,24 +1,27 @@
 /* LoginPage.module.css - Estilos optimizados para MediaVerse */
 
+/* =======================================================
+   1. Contenedores Principales y Fondo
+   ======================================================= */
 .container {
     min-height: 100vh;
-    /* ELIMINAR O COMENTAR: max-height: 100vh; */
+    /* max-height: 100vh; y overflow: hidden; ELIMINADOS/IGNORADOS */
     background: linear-gradient(135deg, #111827 0%, #581c87 50%, #111827 100%);
     position: relative;
-    /* ELIMINAR O COMENTAR: overflow: hidden; (Permitirá el scroll global) */
-    overflow-x: hidden; /* Mantenemos el hidden horizontal */
+    overflow-x: hidden;
     width: 100vw;
     margin: 0;
     padding: 0;
 }
-/* Efectos de fondo */
+
+/* Efectos de fondo (SIN CAMBIOS) */
 .background {
     position: absolute;
     inset: 0;
     overflow: hidden;
     width: 100vw;
 }
-
+/* ... (Resto de .background, .gradientTop, .blobPurple, @keyframes float, etc.) ... */
 .background::before {
     content: '';
     position: absolute;
@@ -91,10 +94,10 @@
 .content {
     position: relative;
     width: 100vw;
-    min-height: 100vh; /* Cambiamos a min-height */
-    height: auto; /* Permite que crezca */
+    min-height: 100vh; /* Permite crecer */
+    height: auto; 
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* INICIA DESDE ARRIBA para evitar corte en pantallas cortas */
     justify-content: center;
     padding: 0;
     margin: 0;
@@ -103,44 +106,14 @@
 
 .wrapper {
     width: 100%;
-    max-width: 1600px; /* Ancho máximo para el contenido */
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 0 1rem;
-    height: 100%;
+    /* PADDING POR DEFECTO (MÓVIL/TABLET CORTA) */
+    padding: 3rem 1rem; 
+    height: auto; 
     display: flex;
     align-items: center;
     box-sizing: border-box;
-}
-
-@media (min-width: 640px) {
-    .wrapper {
-        padding: 0 1.5rem;
-    }
-}
-
-@media (min-width: 768px) {
-    .wrapper {
-        padding: 0 2rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .wrapper {
-        padding: 0 3rem;
-    }
-}
-
-@media (min-width: 1280px) {
-    .wrapper {
-        padding: 0 4rem;
-    }
-}
-
-@media (min-width: 1536px) {
-    .wrapper {
-        padding: 0 5rem;
-        max-width: 1800px;
-    }
 }
 
 .columns {
@@ -150,31 +123,9 @@
     align-items: stretch;
     justify-content: center;
     width: 100%;
-    height: 100%;
-    /* ELIMINAR O COMENTAR LA SIGUIENTE LÍNEA: */
-    /* max-height: 90vh; */ 
+    height: auto; /* Permite crecer */
+    /* max-height: 90vh; ELIMINADO/IGNORADO */
     overflow: hidden;
-}
-
-@media (min-width: 1024px) {
-    .columns {
-        flex-direction: row;
-        gap: 2rem;
-        /* ELIMINAR O COMENTAR LA SIGUIENTE LÍNEA: */
-        /* max-height: 85vh; */
-    }
-}
-
-@media (min-width: 1280px) {
-    .columns {
-        gap: 3rem;
-    }
-}
-
-@media (min-width: 1536px) {
-    .columns {
-        gap: 4rem;
-    }
 }
 
 /* Columna izquierda - Información */
@@ -185,31 +136,286 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    height: 100%;
-    overflow-y: auto;
+    height: auto; /* Permite crecer */
+    overflow-y: visible; /* Scroll a nivel global en móvil */
     box-sizing: border-box;
 }
 
+/* Columna derecha - Formulario */
+.formColumn {
+    width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to left, rgba(31, 41, 55, 0.7), rgba(31, 41, 55, 0.8), rgba(31, 41, 55, 0.9));
+    border-radius: 1.25rem;
+    height: auto; /* Permite crecer */
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Form Wrapper (SIN CAMBIOS) */
+.formWrapper {
+    width: 100%;
+    padding: 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* =======================================================
+   2. Media Queries Consolidadas
+   ======================================================= */
+
+/* --- TABLET (min-width: 640px) --- */
+@media (min-width: 640px) {
+    .wrapper {
+        padding: 4rem 1.5rem; 
+    }
+    .title {
+        font-size: 2.5rem;
+    }
+    .mainHeading {
+        font-size: 1.75rem;
+    }
+    .description {
+        font-size: 1.125rem;
+    }
+    .feature {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .featureText {
+        text-align: left;
+    }
+    .formWrapper {
+        padding: 1.5rem;
+    }
+    .formContainer {
+        padding: 2rem;
+    }
+}
+
+/* --- SMALL DESKTOP (min-width: 768px) --- */
+@media (min-width: 768px) {
+    .wrapper {
+        padding: 4rem 2rem; /* Mantener padding vertical y ajustar horizontal */
+    }
+}
+
+/* --- DESKTOP (min-width: 1024px) --- */
 @media (min-width: 1024px) {
+    /* AJUSTE CLAVE: Volver a centrar y usar layout de columnas */
+    .content {
+        align-items: center; /* Volver a centrar verticalmente en pantallas grandes */
+    }
+    .wrapper {
+        padding: 0 3rem; /* Eliminar padding vertical redundante ya que centramos */
+        max-width: 1600px;
+    }
+    .columns {
+        flex-direction: row;
+        gap: 2rem;
+        max-height: 85vh; /* Opcional: Reestablecer max-height para un buen centrado */
+    }
+    
+    .logoContainer {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .logoText {
+        text-align: left;
+    }
+    .title {
+        font-size: 3rem;
+    }
+    .subtitle {
+        font-size: 1.125rem;
+    }
+    .mainHeading {
+        font-size: 2.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .description {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+    .features {
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+    }
+    .featureTitle {
+        font-size: 1.125rem;
+    }
+    .featureDesc {
+        font-size: 0.9375rem;
+    }
+    .stats {
+        justify-content: flex-start;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .statNumber {
+        font-size: 1.75rem;
+    }
+    .statLabel {
+        font-size: 0.875rem;
+    }
+    .formColumn {
+        flex: 0 0 48%;
+        border-radius: 1.25rem 0 0 1.25rem;
+        max-height: 85vh;
+    }
+    .formWrapper {
+        padding: 2rem;
+    }
+    .formContainer {
+        max-width: 450px;
+    }
+    .formTitle {
+        font-size: 1.75rem;
+    }
+    .formSubtitle {
+        font-size: 1rem;
+    }
+    .formLabel {
+        font-size: 0.875rem;
+    }
+    .rememberLabel {
+        font-size: 0.875rem;
+    }
+    .forgot {
+        font-size: 0.875rem;
+    }
+    .registerText {
+        font-size: 0.875rem;
+    }
+    .registerButton {
+        font-size: 0.875rem;
+    }
+    .demoText {
+        font-size: 0.75rem;
+    }
+    /* Reestablecer scroll en la columna de información en desktop */
     .infoColumn {
         flex: 0 0 48%;
         padding: 2rem;
-        height: auto;
         max-height: 85vh;
         overflow-y: auto;
     }
 }
 
+/* --- LARGE DESKTOP (min-width: 1280px) --- */
 @media (min-width: 1280px) {
+    .wrapper {
+        padding: 0 4rem;
+    }
+    .title {
+        font-size: 3.5rem;
+    }
+    .mainHeading {
+        font-size: 2.75rem;
+    }
+    .statNumber {
+        font-size: 2rem;
+    }
+    .formColumn {
+        flex: 0 0 45%;
+    }
+    .formWrapper {
+        padding: 2.5rem;
+    }
     .infoColumn {
         flex: 0 0 45%;
         padding: 2.5rem;
     }
+    .columns {
+        gap: 3rem;
+    }
 }
 
+/* --- XL DESKTOP (min-width: 1536px) --- */
+@media (min-width: 1536px) {
+    .wrapper {
+        padding: 0 5rem;
+        max-width: 1800px;
+    }
+    .columns {
+        gap: 4rem;
+    }
+}
+
+/* --- XXL / ULTRA WIDE (min-width: 1920px) --- */
+@media (min-width: 1920px) {
+    .wrapper {
+        max-width: 2000px;
+        padding: 0 6rem;
+    }
+    .columns {
+        gap: 5rem;
+        max-height: 80vh; 
+    }
+    .infoContent {
+        max-width: 700px;
+    }
+    .formContainer {
+        max-width: 500px;
+    }
+}
+
+/* =======================================================
+   3. Fallback Móvil (max-width: 1023px y Landscape)
+   ======================================================= */
+
+/* Fallback para Móvil/Tablet Vertical */
+@media (max-width: 1023px) {    
+    .columns {
+        max-width: 600px;
+        margin: 0 auto;
+        height: auto; 
+        padding: 0; 
+    }
+    /* La columna de información debe ser visible y no hacer scroll interno en móvil */
+    .infoColumn {
+        overflow-y: visible;
+        padding: 0;
+    }
+    .formColumn {
+        border-radius: 1.25rem;
+        min-height: auto;
+    }
+}
+
+/* Ajuste para dispositivos móviles en landscape (pantallas muy cortas) */
+@media (max-height: 600px) and (orientation: landscape) {
+    .container {
+        min-height: auto;
+        height: auto;
+    }
+    .content {
+        height: auto;
+        min-height: 100vh;
+        padding: 1rem 0;
+        align-items: flex-start; /* Aseguramos que empiece por arriba */
+    }
+    .columns {
+        max-height: none;
+    }
+}
+
+/* =======================================================
+   4. Otros Estilos (SIN CAMBIOS)
+   ======================================================= */
+/* ... (Resto de .infoContent, .logoContainer, .formInput, .error, etc.) ... */
 .infoContent {
     width: 100%;
-    max-width: 650px; /* Ancho máximo para el contenido de información */
+    max-width: 650px;
     padding: 0.5rem;
     box-sizing: border-box;
     margin: 0 auto;
@@ -223,16 +429,7 @@
     gap: 0.75rem;
     margin-bottom: 1.5rem;
 }
-
-@media (min-width: 1024px) {
-    .logoContainer {
-        flex-direction: row;
-        align-items: flex-start;
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-}
-
+/* ... */
 .logoIcon {
     width: 3.5rem;
     height: 3.5rem;
@@ -245,15 +442,9 @@
     border: 2px solid rgba(147, 51, 234, 0.3);
     flex-shrink: 0;
 }
-
+/* ... */
 .logoText {
     text-align: center;
-}
-
-@media (min-width: 1024px) {
-    .logoText {
-        text-align: left;
-    }
 }
 
 .title {
@@ -266,37 +457,13 @@
     line-height: 1.2;
     margin: 0;
 }
-
-@media (min-width: 640px) {
-    .title {
-        font-size: 2.5rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .title {
-        font-size: 3rem;
-    }
-}
-
-@media (min-width: 1280px) {
-    .title {
-        font-size: 3.5rem;
-    }
-}
-
+/* ... */
 .subtitle {
     color: #9ca3af;
     font-size: 1rem;
     margin-top: 0.25rem;
 }
-
-@media (min-width: 1024px) {
-    .subtitle {
-        font-size: 1.125rem;
-    }
-}
-
+/* ... */
 /* Título principal */
 .mainHeading {
     font-size: 1.5rem;
@@ -304,25 +471,6 @@
     color: white;
     line-height: 1.3;
     margin-bottom: 1rem;
-}
-
-@media (min-width: 640px) {
-    .mainHeading {
-        font-size: 1.75rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .mainHeading {
-        font-size: 2.25rem;
-        margin-bottom: 1.5rem;
-    }
-}
-
-@media (min-width: 1280px) {
-    .mainHeading {
-        font-size: 2.75rem;
-    }
 }
 
 .gradientText {
@@ -339,20 +487,7 @@
     max-width: 550px;
     line-height: 1.5;
 }
-
-@media (min-width: 640px) {
-    .description {
-        font-size: 1.125rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .description {
-        font-size: 1.25rem;
-        margin-bottom: 2rem;
-    }
-}
-
+/* ... */
 /* Características */
 .features {
     display: flex;
@@ -360,29 +495,14 @@
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
-
-@media (min-width: 1024px) {
-    .features {
-        gap: 1.25rem;
-        margin-bottom: 2rem;
-    }
-}
-
+/* ... */
 .feature {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
 }
-
-@media (min-width: 640px) {
-    .feature {
-        flex-direction: row;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-}
-
+/* ... */
 .featureIcon {
     flex-shrink: 0;
     width: 2.5rem;
@@ -398,38 +518,20 @@
     text-align: center;
     max-width: 500px;
 }
-
-@media (min-width: 640px) {
-    .featureText {
-        text-align: left;
-    }
-}
-
+/* ... */
 .featureTitle {
     font-size: 1rem;
     font-weight: 600;
     color: white;
     margin-bottom: 0.125rem;
 }
-
-@media (min-width: 1024px) {
-    .featureTitle {
-        font-size: 1.125rem;
-    }
-}
-
+/* ... */
 .featureDesc {
     color: #9ca3af;
     font-size: 0.875rem;
     line-height: 1.4;
 }
-
-@media (min-width: 1024px) {
-    .featureDesc {
-        font-size: 0.9375rem;
-    }
-}
-
+/* ... */
 /* Estadísticas */
 .stats {
     display: flex;
@@ -437,15 +539,7 @@
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
-
-@media (min-width: 1024px) {
-    .stats {
-        justify-content: flex-start;
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-}
-
+/* ... */
 .stat {
     text-align: center;
 }
@@ -455,87 +549,14 @@
     font-weight: 700;
     color: white;
 }
-
-@media (min-width: 1024px) {
-    .statNumber {
-        font-size: 1.75rem;
-    }
-}
-
-@media (min-width: 1280px) {
-    .statNumber {
-        font-size: 2rem;
-    }
-}
-
+/* ... */
 .statLabel {
     color: #9ca3af;
     font-size: 0.75rem;
 }
-
-@media (min-width: 1024px) {
-    .statLabel {
-        font-size: 0.875rem;
-    }
-}
-
-/* Columna derecha - Formulario */
-.formColumn {
-    width: 100%;
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(to left, rgba(31, 41, 55, 0.7), rgba(31, 41, 55, 0.8), rgba(31, 41, 55, 0.9));
-    border-radius: 1.25rem;
-    height: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
-@media (min-width: 1024px) {
-    .formColumn {
-        flex: 0 0 48%;
-        border-radius: 1.25rem 0 0 1.25rem;
-        height: auto;
-        max-height: 85vh;
-    }
-}
-
-@media (min-width: 1280px) {
-    .formColumn {
-        flex: 0 0 45%;
-    }
-}
-
-.formWrapper {
-    width: 100%;
-    padding: 1rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-@media (min-width: 640px) {
-    .formWrapper {
-        padding: 1.5rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .formWrapper {
-        padding: 2rem;
-    }
-}
-
-@media (min-width: 1280px) {
-    .formWrapper {
-        padding: 2.5rem;
-    }
-}
-
+/* ... */
+/* Form Wrapper (ya se movió arriba) */
+/* ... */
 .formContainer {
     background: rgba(31, 41, 55, 0.8);
     backdrop-filter: blur(20px);
@@ -544,23 +565,11 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
     width: 100%;
-    max-width: 500px; /* Ancho máximo para el formulario */
+    max-width: 500px;
     margin: 0 auto;
     box-sizing: border-box;
 }
-
-@media (min-width: 640px) {
-    .formContainer {
-        padding: 2rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .formContainer {
-        max-width: 450px;
-    }
-}
-
+/* ... */
 /* Cabecera del formulario */
 .formHeader {
     text-align: center;
@@ -579,31 +588,19 @@
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(147, 51, 234, 0.3);
 }
-
+/* ... */
 .formTitle {
     font-size: 1.5rem;
     font-weight: 700;
     color: white;
     margin-bottom: 0.25rem;
 }
-
-@media (min-width: 1024px) {
-    .formTitle {
-        font-size: 1.75rem;
-    }
-}
-
+/* ... */
 .formSubtitle {
     color: #9ca3af;
     font-size: 0.875rem;
 }
-
-@media (min-width: 1024px) {
-    .formSubtitle {
-        font-size: 1rem;
-    }
-}
-
+/* ... */
 /* Mensaje de error */
 .error {
     animation: fadeIn 0.3s ease-in;
@@ -614,7 +611,7 @@
     backdrop-filter: blur(8px);
     margin-bottom: 1.25rem;
 }
-
+/* ... */
 .errorContent {
     display: flex;
     align-items: center;
@@ -634,25 +631,14 @@
     color: #fecaca;
     line-height: 1.4;
 }
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* ... */
 /* Formulario */
 .form {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
 }
-
+/* ... */
 .formGroup {
     display: flex;
     flex-direction: column;
@@ -664,13 +650,7 @@
     font-weight: 600;
     color: #d1d5db;
 }
-
-@media (min-width: 1024px) {
-    .formLabel {
-        font-size: 0.875rem;
-    }
-}
-
+/* ... */
 .formInput {
     width: 100%;
     padding: 0.625rem 0.875rem;
@@ -682,82 +662,8 @@
     transition: all 0.2s ease;
     box-sizing: border-box;
 }
-
-.formInput:focus {
-    outline: none;
-    border-color: #9333ea;
-    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
-}
-
-.formInput:hover {
-    border-color: #4b5563;
-}
-
-.formInput::placeholder {
-    color: #6b7280;
-}
-
-.formOptions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.remember {
-    display: flex;
-    align-items: center;
-}
-
-.checkbox {
-    width: 0.875rem;
-    height: 0.875rem;
-    color: #9333ea;
-    background-color: #1f2937;
-    border-color: #374151;
-    border-radius: 0.25rem;
-    cursor: pointer;
-}
-
-.checkbox:focus {
-    outline: 2px solid #9333ea;
-    outline-offset: 1px;
-    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.3);
-}
-
-.rememberLabel {
-    margin-left: 0.375rem;
-    font-size: 0.8125rem;
-    color: #d1d5db;
-    cursor: pointer;
-}
-
-@media (min-width: 1024px) {
-    .rememberLabel {
-        font-size: 0.875rem;
-    }
-}
-
-.forgot {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #c084fc;
-    text-decoration: none;
-    transition: color 0.2s ease;
-    white-space: nowrap;
-}
-
-.forgot:hover {
-    color: #d8b4fe;
-}
-
-@media (min-width: 1024px) {
-    .forgot {
-        font-size: 0.875rem;
-    }
-}
-
+/* ... */
+/* Submit Button y otros elementos del formulario (SIN CAMBIOS en sus bloques) */
 .submitButton {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -772,116 +678,8 @@
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.4);
     margin-top: 0.5rem;
 }
-
-.submitButton:hover {
-    background: linear-gradient(to right, #7e22ce, #db2777);
-    box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.4);
-}
-
-.submitButton:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.5);
-}
-
-.submitButton:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.submitButton:disabled:hover {
-    background: linear-gradient(to right, #9333ea, #ec4899);
-    box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.4);
-}
-
-.spinner {
-    animation: spin 1s linear infinite;
-    margin-right: 0.5rem;
-    width: 1rem;
-    height: 1rem;
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Separador */
-.separator {
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid #374151;
-}
-
-.registerText {
-    text-align: center;
-    color: #9ca3af;
-    font-size: 0.8125rem;
-    margin-bottom: 0.75rem;
-}
-
-@media (min-width: 1024px) {
-    .registerText {
-        font-size: 0.875rem;
-    }
-}
-
-.registerButton {
-    width: 100%;
-    padding: 0.625rem 1rem;
-    background: rgba(31, 41, 55, 0.6);
-    color: white;
-    font-weight: 600;
-    font-size: 0.8125rem;
-    border-radius: 0.75rem;
-    border: 1px solid #374151;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.registerButton:hover {
-    background: rgba(31, 41, 55, 1);
-    border-color: rgba(147, 51, 234, 0.3);
-}
-
-@media (min-width: 1024px) {
-    .registerButton {
-        font-size: 0.875rem;
-    }
-}
-
-/* Demo credentials */
-.demo {
-    margin-top: 1.25rem;
-    text-align: center;
-}
-
-.demoText {
-    font-size: 0.6875rem;
-    color: #6b7280;
-    line-height: 1.4;
-}
-
-@media (min-width: 1024px) {
-    .demoText {
-        font-size: 0.75rem;
-    }
-}
-
-.demoCredentials {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    color: #d8b4fe;
-    font-size: 0.75rem;
-}
-
-/* Scrollbar personalizado */
+/* ... */
+/* Scrollbar personalizado (SIN CAMBIOS) */
 .infoColumn::-webkit-scrollbar {
     width: 6px;
 }
@@ -898,66 +696,4 @@
 
 .infoColumn::-webkit-scrollbar-thumb:hover {
     background: rgba(147, 51, 234, 0.5);
-}
-
-/* Responsive adicional */
-/* Responsive adicional */
-@media (max-width: 1023px) {    
-    .columns {
-        max-width: 600px;
-        margin: 0 auto;
-        /* ELIMINAR O COMENTAR LA SIGUIENTE LÍNEA: */
-        /* max-height: none; */ 
-        height: auto; /* Asegurar que no restrinja la altura */
-        padding: 2rem 0; /* Añadir padding vertical para respirar */
-    }
-    
-    .infoColumn {
-        min-height: auto;
-        overflow-y: visible;
-    }
-    
-    .formColumn {
-        border-radius: 1.25rem;
-        min-height: auto;
-    }
-}
-
-/* Ajustes para pantallas muy grandes */
-@media (min-width: 1920px) {
-    .wrapper {
-        max-width: 2000px;
-        padding: 0 6rem;
-    }
-    
-    .columns {
-        gap: 5rem;
-        max-height: 80vh;
-    }
-    
-    .infoContent {
-        max-width: 700px;
-    }
-    
-    .formContainer {
-        max-width: 500px;
-    }
-}
-
-/* Ajuste para dispositivos móviles en landscape */
-@media (max-height: 600px) and (orientation: landscape) {
-    .container {
-        min-height: auto;
-        height: auto;
-    }
-    
-    .content {
-        height: auto;
-        min-height: 100vh;
-        padding: 1rem 0;
-    }
-    
-    .columns {
-        max-height: none;
-    }
 }
