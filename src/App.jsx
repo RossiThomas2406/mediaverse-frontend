@@ -1,5 +1,6 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom'; 
+// src/App.jsx (VERSIÓN FINAL Y MÁS ROBUSTA PARA HASHROUTER)
 
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Auth/LoginPage'; 
 import RegisterPage from './pages/Auth/RegisterPage'; 
 import SearchPage from './pages/Search/SearchPage';
@@ -12,20 +13,26 @@ function App() {
       <div className="min-h-screen"> 
         <Routes>
           
-          {/* RUTA DE REDIRECCIÓN INICIAL (AÑADIR ESTA LÍNEA) */}
-          {/* Si el usuario llega a la URL base (que es /), lo enviamos al login inmediatamente */}
-          <Route path="/" element={<Navigate to="/login" replace />} /> 
-
-          {/* Rutas Públicas (acceso libre) */}
+          {/* Rutas Públicas */}
           <Route path="/login" element={<LoginPage />} /> 
           <Route path="/register" element={<RegisterPage />} /> 
           
           {/* GRUPO DE RUTAS PROTEGIDAS */}
           <Route element={<ProtectedRoutes />}>
-            {/* Cambiamos la ruta "/" protegida a "/search" para evitar conflicto con la redirección inicial, o la eliminamos ya que la pusimos en la redirección */}
-            <Route path="/search" element={<SearchPage />} /> 
+            
+            {/* CRÍTICO: Definimos la ruta base '/' como la página de búsqueda.
+               Si el usuario no está logueado, ProtectedRoutes lo enviará a /login.
+            */}
+            <Route path="/" element={<SearchPage />} /> 
+            
             <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
+          
+          {/* Ruta comodín: Maneja cualquier ruta que no coincida enviando al usuario
+             a la página de Login/Registro si no se encuentra. 
+          */}
+          <Route path="*" element={<LoginPage />} />
+          
         </Routes>
       </div>
     </Router>
