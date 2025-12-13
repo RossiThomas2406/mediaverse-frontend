@@ -15,6 +15,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html, body {
+  /* Establecer un fondo muy oscuro (ej: el color de tu fondo #111827) */
+  background-color: #0b111a; /* Un color base muy oscuro */
+  color: #e5e7eb; /* Asegura que el texto predeterminado sea claro */
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Evita barras de desplazamiento horizontales */
+}
+
 a {
   font-weight: 500;
   color: #646cff;
